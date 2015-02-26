@@ -1,43 +1,9 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-	<meta charset="utf-8"/>
-	<style>
-		.stars{
-			color:#aaa;
-			width:75px;
-			white-space:nowrap;
-			display:inline-block;
-		}
-		.staticStars{
-			width:75px;
-			height:15px;
-			font-size:0;
-			background-repeat:no-repeat;
-			white-space:nowrap;
-			display:inline-block;
-			vertical-align:top;
-		}
-		.staticStar{
-			width:15px;
-			height:15px;
-			float:left;
-			background-repeat:no-repeat;
-			cursor:pointer;
-			font-size:0 !important;
-		}
-		a{
-			color:#666600;
-			text-decoration:none;
-		}
-		.off{
-			background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAABJklEQVR42p2RO4qDUBiFs4NsYZaQeppJLYI2l3EFgtVgL1i4AEHQ2kLFDQipbAQRC6OND/CxhCzhH4/FkIkaSIoPDufBvV4PRLQJx3EnAL3HbqAoigneGjuOM4GXx4yxUxRFBKBfGuu6bqZpSgB6dyyK4vkeSZLOQRBMVVURgIb32ON5/vtgGMbVtm2av2/B8zxKkoS6rgPQ8P5ydLERBOFzOT4Mw+WaeZ5TURTUNA0NwwCg4S0ZOuiuvnk2hfmkGwbjOP4DHjJ09h4Mv+erbdvVGB6yp69tWZZZluVqDA/Z07Hrule8MK7Z9/0EoOEh2xvjl31cLheq65qyLDNlWT4CaHjI0Nkcq6r6E8fxzfd94fEEeMjQ2RxrmqYzxo7QWyBD5977Bcdse9huaoxSAAAAAElFTkSuQmCC')
-		}
-		.on{
-			background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAMAAAAMCGV4AAAAeFBMVEUAAABVRESAYEilcEplVEaucUnTh1D7m1iEXkeEYUd7W0a/ekyZaEadbUmfbUvkj1DvllTxmFewdUz4mVO2d0v8nFb+nli4d0vIgE7LgUzOhE/cik/fjVHxllP0llH3mVX4mVL5mVP6mVP6mlT7m1X8m1X8nFb9nVcdRnoTAAAAGXRSTlMADyAwOj9AQE9PV29/j4+Pj4/Pz9/f3+/vmKSHHAAAAHNJREFUCB1VwQcSgyAUBcCHxBYL9t4wEe9/Q/HjOLoLEM7xkqZ4qSo88X3neEiUSmA4rlYqVbqa80U2bLch+wBxN//J3MU4+c2PND4MeyU2LkLKcZRS4JIvfVH0Sw7DmtqIsaidLJCg9qB5dQASMhAWAjgAIl4Jl9HhyGUAAAAASUVORK5CYII=')
-		}
-	</style>
-</head>
+		<meta charset="utf-8"/>
+		<link rel="stylesheet" type="text/css" href="g.css">
+	</head>
 <body>
 	<span class="stars staticStars">
 		<a class="staticStar p10 off" size ="12*12" title = "did not like it"></a>
@@ -49,32 +15,40 @@
 	<p class='p'></p>
 	<script src='jquery.js'></script>
 	<script>
-		$(function(){
-			$('.staticStars').bind('click',function(e){
+		var J = {
+			opt : {
+				o:null, c:null, d:null, i:0, f:null
+			},
+			over : function(e){
+				//console.log(this+'...'+J);
+				console.log('over');
+				var $o = $(e.target);
+				obj = J.opt;
+				obj.o = $(e.target);
+				obj.c = obj.o.parent()
+				obj.d = obj.c.children();
+				obj.i = obj.o.index() + 1;
+				obj.f = obj.d.slice(0,obj.i);
+				obj.d.removeClass('on');
+				obj.d.addClass("off");
+				obj.f.addClass("on");
+				$('p').html(obj.o.attr("title"));
+			},
+			out : function(e){
+				console.log('out');
+				J.opt.d.removeClass('on');
+				$('p').html("");
+			},
+			clicked : function(e){
+				console.log('clicked');
 				$('.staticStar').unbind('mouseover');
 				$('.staticStar').unbind('mouseout');
-			});
-			$('.staticStar').bind('mouseover',function(e){
-				var o = $(this),
-					c = o.parent(),
-					d = c.children();
-					i = o.index()+1;
-					f = d.slice(0,i);
-				d.removeClass('on');
-				d.addClass('off');
-				f.addClass('on');
-				console.log(f+"+++"+typeof f)
-				$('p').html(o.attr("title"));
-			});
-			$('.staticStar').bind('mouseout',function(e){
-				var o = $(this),
-					c = o.parent(),
-					d = c.children();
-					i = o.index()+1;
-					f = d.slice(0,i);
-				d.removeClass('on');
-				$('p').html("");
-			});
+			}
+		}
+		$(function(){
+			$('.staticStars').bind("click",J.clicked);
+			$('.staticStars').bind("mouseover",J.over);
+			$('.staticStar').bind('mouseout',J.out);
 		});
 	</script>
 </body>
